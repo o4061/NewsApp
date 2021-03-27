@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.userfaltakas.newsapp.R
 import com.userfaltakas.newsapp.api.Resource
 import com.userfaltakas.newsapp.constants.Constants.SEARCH_NEWS_TIME_DELAY
 import com.userfaltakas.newsapp.databinding.FragmentSearchNewsBinding
@@ -38,9 +40,17 @@ class SearchNewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
-
-        viewModel = (activity as NewsActivity).viewModel
         setUpRecyclerView()
+
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putParcelable("article", it)
+            }
+            findNavController().navigate(
+                R.id.action_searchNewsFragment_to_articleFragment,
+                bundle
+            )
+        }
 
         var job: Job? = null
         binding.etSearch.addTextChangedListener { editable ->
