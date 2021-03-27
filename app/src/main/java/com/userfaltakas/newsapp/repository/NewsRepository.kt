@@ -18,7 +18,7 @@ class NewsRepository(
         return RetrofitInstance.api.getBreakingNews(filter)
     }
 
-    suspend fun searchForNews(query: String): Response<NewsResponse> {
+    suspend fun searchNews(query: String): Response<NewsResponse> {
         val filter = mutableMapOf<String, String>()
         filter["q"] = query
         filter["page"] = "1"
