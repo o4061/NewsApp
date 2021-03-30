@@ -1,14 +1,15 @@
 package com.userfaltakas.newsapp.repository
 
+import androidx.lifecycle.LiveData
 import com.userfaltakas.newsapp.api.RetrofitInstance
 import com.userfaltakas.newsapp.constants.Constants.API_KEY
+import com.userfaltakas.newsapp.data.Article
 import com.userfaltakas.newsapp.data.NewsResponse
 import com.userfaltakas.newsapp.database.ArticleDatabase
 import retrofit2.Response
-import retrofit2.Retrofit
 
 class NewsRepository(
-    val db: ArticleDatabase
+    private val db: ArticleDatabase
 ) {
     suspend fun getBreakingNews(countryCode: String, pageNumber: Int): Response<NewsResponse> {
         val filter = mutableMapOf<String, String>()
@@ -25,5 +26,17 @@ class NewsRepository(
         filter["apiKey"] = API_KEY
 
         return RetrofitInstance.api.searchForNews(filter)
+    }
+
+    suspend fun upsert(article: Article) {
+        db.getArticleDao().upsert(article)
+    }
+
+    fun getSavedNews(): LiveData<List<Article>> {
+        return db.getArticleDao().getAllArticles()
+    }
+
+    suspend fun deleteArticle(article: Article) {
+        db.getArticleDao().deleteArticle(article)
     }
 }

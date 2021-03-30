@@ -7,8 +7,8 @@ import com.userfaltakas.newsapp.data.Article
 @Dao
 interface ArticleDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(article: Article): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun upsert(article: Article)
 
     @Query("SELECT * FROM articles")
     fun getAllArticles(): LiveData<List<Article>>
